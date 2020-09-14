@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">Morpion</string>
+    <string name="btRetry">Retry</string>
+    <string name="btQuit">Quit Game</string>
+</resources>
