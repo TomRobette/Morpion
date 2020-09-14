@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -27,6 +28,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void init(){
+        tour=0;
         listeCaracteres = new ArrayList<>();
         for (int a = 0; a<9; a++){
             listeCaracteres.add('.');
@@ -59,35 +61,40 @@ public class MainActivity extends AppCompatActivity {
         int compteur = 0;
         for (Button btn:listBtn){
             final int compteurFinal = compteur;
-            btn.setOnClickListener(new Button.OnClickListener(){
+            btn.setOnClickListener(new Button.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    if (MainActivity.listeCaracteres.get(compteurFinal)=='.')
-                        MainActivity.listeCaracteres.set(compteurFinal, MainActivity.getCarctere());
-                        MainActivity.listBtn.get(compteurFinal).setText(MainActivity.getCarctere());
+                    if (MainActivity.listeCaracteres.get(compteurFinal)=='.') {
+                        MainActivity.listeCaracteres.set(compteurFinal, MainActivity.getCaractere());
+//                        MainActivity.listBtn.get(compteurFinal).setText(MainActivity.getCaractere());
+                        testVictory();
                         MainActivity.tour++;
-                }​
-            })​;
+                    }
+                }
+            });
             compteur++;
         }
     }
 
-    public static Character getCarctere(){
+
+
+    private static Character getCaractere(){
         if(MainActivity.tour%2>0){
             return MainActivity.JOUEUR2;
         }
         return MainActivity.JOUEUR1;
     }
 
-    public static void testVictory(){
+
+    private void testVictory(){
         if (listeCaracteres.get(0)==MainActivity.JOUEUR1 && listeCaracteres.get(1)==MainActivity.JOUEUR1 && listeCaracteres.get(2)==MainActivity.JOUEUR1 ||
                 listeCaracteres.get(0)==MainActivity.JOUEUR1 && listeCaracteres.get(3)==MainActivity.JOUEUR1 && listeCaracteres.get(6)==MainActivity.JOUEUR1 ||
                 listeCaracteres.get(1)==MainActivity.JOUEUR1 && listeCaracteres.get(4)==MainActivity.JOUEUR1 && listeCaracteres.get(7)==MainActivity.JOUEUR1 ||
                 listeCaracteres.get(2)==MainActivity.JOUEUR1 && listeCaracteres.get(5)==MainActivity.JOUEUR1 && listeCaracteres.get(8)==MainActivity.JOUEUR1 ||
                 listeCaracteres.get(3)==MainActivity.JOUEUR1 && listeCaracteres.get(4)==MainActivity.JOUEUR1 && listeCaracteres.get(5)==MainActivity.JOUEUR1 ||
                 listeCaracteres.get(6)==MainActivity.JOUEUR1 && listeCaracteres.get(7)==MainActivity.JOUEUR1 && listeCaracteres.get(8)==MainActivity.JOUEUR1 ||
-                listeCaracteres.get(0)==MainActivity.JOUEUR1 && listeCaracteres.get(5)==MainActivity.JOUEUR1 && listeCaracteres.get(8)==MainActivity.JOUEUR1 ||
-                listeCaracteres.get(2)==MainActivity.JOUEUR1 && listeCaracteres.get(5)==MainActivity.JOUEUR1 && listeCaracteres.get(6)==MainActivity.JOUEUR1){
+                listeCaracteres.get(0)==MainActivity.JOUEUR1 && listeCaracteres.get(4)==MainActivity.JOUEUR1 && listeCaracteres.get(8)==MainActivity.JOUEUR1 ||
+                listeCaracteres.get(2)==MainActivity.JOUEUR1 && listeCaracteres.get(4)==MainActivity.JOUEUR1 && listeCaracteres.get(6)==MainActivity.JOUEUR1){
             onVictory();
         }else if (listeCaracteres.get(0)==MainActivity.JOUEUR2 && listeCaracteres.get(1)==MainActivity.JOUEUR2 && listeCaracteres.get(2)==MainActivity.JOUEUR2 ||
                 listeCaracteres.get(0)==MainActivity.JOUEUR2 && listeCaracteres.get(3)==MainActivity.JOUEUR2 && listeCaracteres.get(6)==MainActivity.JOUEUR2 ||
@@ -95,14 +102,20 @@ public class MainActivity extends AppCompatActivity {
                 listeCaracteres.get(2)==MainActivity.JOUEUR2 && listeCaracteres.get(5)==MainActivity.JOUEUR2 && listeCaracteres.get(8)==MainActivity.JOUEUR2 ||
                 listeCaracteres.get(3)==MainActivity.JOUEUR2 && listeCaracteres.get(4)==MainActivity.JOUEUR2 && listeCaracteres.get(5)==MainActivity.JOUEUR2 ||
                 listeCaracteres.get(6)==MainActivity.JOUEUR2 && listeCaracteres.get(7)==MainActivity.JOUEUR2 && listeCaracteres.get(8)==MainActivity.JOUEUR2 ||
-                listeCaracteres.get(0)==MainActivity.JOUEUR2 && listeCaracteres.get(5)==MainActivity.JOUEUR2 && listeCaracteres.get(8)==MainActivity.JOUEUR2 ||
-                listeCaracteres.get(2)==MainActivity.JOUEUR2 && listeCaracteres.get(5)==MainActivity.JOUEUR2 && listeCaracteres.get(6)==MainActivity.JOUEUR2){
+                listeCaracteres.get(0)==MainActivity.JOUEUR2 && listeCaracteres.get(4)==MainActivity.JOUEUR2 && listeCaracteres.get(8)==MainActivity.JOUEUR2 ||
+                listeCaracteres.get(2)==MainActivity.JOUEUR2 && listeCaracteres.get(4)==MainActivity.JOUEUR2 && listeCaracteres.get(6)==MainActivity.JOUEUR2){
             onVictory();
         }
     }
 
-    protected static void onVictory(){
-        
+    private void onVictory(){
+        String msg;
+        if (MainActivity.getCaractere()==MainActivity.JOUEUR1){
+            msg = "BRUH1";
+        }else{
+            msg = "BRUH2";
+        }
+        Toast.makeText(MainActivity.this, msg, Toast.LENGTH_LONG).show();
     }
 
 

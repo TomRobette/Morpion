@@ -2,4 +2,6 @@
     <string name="app_name">Morpion</string>
     <string name="btRetry">Retry</string>
     <string name="btQuit">Quit Game</string>
+    <string name="win1">Player X win !</string>
+    <string name="win2">Player Y win !</string>
 </resources>
