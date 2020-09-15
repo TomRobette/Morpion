@@ -13,7 +13,6 @@ import java.util.ArrayList;
 public class MainActivity extends AppCompatActivity {
     Button button, button2, button3, button4, button5, button6, button7, button8, button9, btRetry, btQuit;
     public static ArrayList<Button> listBtn;
-    TextView textView;
     public static ArrayList<String> listeCaracteres;
     public static final String JOUEUR1 = "X";
     public static final String JOUEUR2 = "O";
@@ -54,7 +53,6 @@ public class MainActivity extends AppCompatActivity {
         listBtn.add(button9);
         btRetry = findViewById(R.id.btRetry);
         btQuit = findViewById(R.id.btQuit);
-        textView = findViewById(R.id.textView);
     }
 
     private void initBtns(){
