@@ -14,9 +14,9 @@ public class MainActivity extends AppCompatActivity {
     Button button, button2, button3, button4, button5, button6, button7, button8, button9, btRetry, btQuit;
     public static ArrayList<Button> listBtn;
     TextView textView;
-    public static ArrayList<Character> listeCaracteres;
-    public static final Character JOUEUR1 = 'X';
-    public static final Character JOUEUR2 = 'Y';
+    public static ArrayList<String> listeCaracteres;
+    public static final String JOUEUR1 = "X";
+    public static final String JOUEUR2 = "O";
     public static int tour;
 
     @Override
@@ -31,7 +31,7 @@ public class MainActivity extends AppCompatActivity {
         tour=0;
         listeCaracteres = new ArrayList<>();
         for (int a = 0; a<9; a++){
-            listeCaracteres.add('.');
+            listeCaracteres.add(".");
         }
         listBtn = new ArrayList<>();
         button = findViewById(R.id.button);
@@ -64,9 +64,9 @@ public class MainActivity extends AppCompatActivity {
             btn.setOnClickListener(new Button.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    if (MainActivity.listeCaracteres.get(compteurFinal)=='.') {
+                    if (MainActivity.listeCaracteres.get(compteurFinal)==".") {
                         MainActivity.listeCaracteres.set(compteurFinal, MainActivity.getCaractere());
-//                        MainActivity.listBtn.get(compteurFinal).setText(MainActivity.getCaractere());
+                        MainActivity.listBtn.get(compteurFinal).setText(MainActivity.getCaractere());
                         testVictory();
                         MainActivity.tour++;
                     }
@@ -74,11 +74,23 @@ public class MainActivity extends AppCompatActivity {
             });
             compteur++;
         }
+        btRetry.setOnClickListener(new Button.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onRetry();
+            }
+        });
+        btQuit.setOnClickListener(new Button.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                System.exit(1);
+            }
+        });
     }
 
 
 
-    private static Character getCaractere(){
+    private static String getCaractere(){
         if(MainActivity.tour%2>0){
             return MainActivity.JOUEUR2;
         }
@@ -109,13 +121,18 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void onVictory(){
-        String msg;
-        if (MainActivity.getCaractere()==MainActivity.JOUEUR1){
-            msg = "BRUH1";
-        }else{
-            msg = "BRUH2";
+        Toast.makeText(MainActivity.this, "Le joueur "+MainActivity.getCaractere()+" à gagné", Toast.LENGTH_LONG).show();
+        onRetry();
+    }
+
+    private void onRetry(){
+        listeCaracteres = new ArrayList<>();
+        for (int a = 0; a<9; a++){
+            listeCaracteres.add(".");
         }
-        Toast.makeText(MainActivity.this, msg, Toast.LENGTH_LONG).show();
+        for (Button btn:listBtn){
+            btn.setText("");
+        }
     }
 
 
