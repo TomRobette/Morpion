@@ -2,21 +2,21 @@ package com.example.myapplication;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
     Button button, button2, button3, button4, button5, button6, button7, button8, button9, btRetry, btQuit;
-    public static ArrayList<Button> listBtn;
-    public static ArrayList<String> listeCaracteres;
+    public ArrayList<Button> listBtn;
     public static final String JOUEUR1 = "X";
     public static final String JOUEUR2 = "O";
-    public static int tour;
+    private static GameState state;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,11 +27,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void init(){
-        tour=0;
-        listeCaracteres = new ArrayList<>();
-        for (int a = 0; a<9; a++){
-            listeCaracteres.add(".");
-        }
+        state = new GameState();
         listBtn = new ArrayList<>();
         button = findViewById(R.id.button);
         listBtn.add(button);
@@ -62,11 +58,17 @@ public class MainActivity extends AppCompatActivity {
             btn.setOnClickListener(new Button.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    if (MainActivity.listeCaracteres.get(compteurFinal)==".") {
-                        MainActivity.listeCaracteres.set(compteurFinal, MainActivity.getCaractere());
-                        MainActivity.listBtn.get(compteurFinal).setText(MainActivity.getCaractere());
+                    if (state.listeCaracteres.get(compteurFinal).equals(".")) {
+                        state.listeCaracteres.set(compteurFinal, MainActivity.getCaractere());
+                        listBtn.get(compteurFinal).setText(MainActivity.getCaractere());
+                        if (MainActivity.getCaractere().equals("O")){
+                            listBtn.get(compteurFinal).setTextColor(Color.BLUE);
+                        }else{
+                            listBtn.get(compteurFinal).setTextColor(Color.RED);
+                        }
+                        listBtn.get(compteurFinal).setEnabled(false);
                         testVictory();
-                        MainActivity.tour++;
+                        state.tourPlusUn();
                     }
                 }
             });
@@ -86,52 +88,79 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-
-
     private static String getCaractere(){
-        if(MainActivity.tour%2>0){
+        if(state.tour%2>0){
             return MainActivity.JOUEUR2;
         }
         return MainActivity.JOUEUR1;
     }
 
-
     private void testVictory(){
-        if (listeCaracteres.get(0)==MainActivity.JOUEUR1 && listeCaracteres.get(1)==MainActivity.JOUEUR1 && listeCaracteres.get(2)==MainActivity.JOUEUR1 ||
-                listeCaracteres.get(0)==MainActivity.JOUEUR1 && listeCaracteres.get(3)==MainActivity.JOUEUR1 && listeCaracteres.get(6)==MainActivity.JOUEUR1 ||
-                listeCaracteres.get(1)==MainActivity.JOUEUR1 && listeCaracteres.get(4)==MainActivity.JOUEUR1 && listeCaracteres.get(7)==MainActivity.JOUEUR1 ||
-                listeCaracteres.get(2)==MainActivity.JOUEUR1 && listeCaracteres.get(5)==MainActivity.JOUEUR1 && listeCaracteres.get(8)==MainActivity.JOUEUR1 ||
-                listeCaracteres.get(3)==MainActivity.JOUEUR1 && listeCaracteres.get(4)==MainActivity.JOUEUR1 && listeCaracteres.get(5)==MainActivity.JOUEUR1 ||
-                listeCaracteres.get(6)==MainActivity.JOUEUR1 && listeCaracteres.get(7)==MainActivity.JOUEUR1 && listeCaracteres.get(8)==MainActivity.JOUEUR1 ||
-                listeCaracteres.get(0)==MainActivity.JOUEUR1 && listeCaracteres.get(4)==MainActivity.JOUEUR1 && listeCaracteres.get(8)==MainActivity.JOUEUR1 ||
-                listeCaracteres.get(2)==MainActivity.JOUEUR1 && listeCaracteres.get(4)==MainActivity.JOUEUR1 && listeCaracteres.get(6)==MainActivity.JOUEUR1){
+        if (state.listeCaracteres.get(0)==MainActivity.JOUEUR1 && state.listeCaracteres.get(1)==MainActivity.JOUEUR1 && state.listeCaracteres.get(2)==MainActivity.JOUEUR1 ||
+                state.listeCaracteres.get(0)==MainActivity.JOUEUR1 && state.listeCaracteres.get(3)==MainActivity.JOUEUR1 && state.listeCaracteres.get(6)==MainActivity.JOUEUR1 ||
+                state.listeCaracteres.get(1)==MainActivity.JOUEUR1 && state.listeCaracteres.get(4)==MainActivity.JOUEUR1 && state.listeCaracteres.get(7)==MainActivity.JOUEUR1 ||
+                state.listeCaracteres.get(2)==MainActivity.JOUEUR1 && state.listeCaracteres.get(5)==MainActivity.JOUEUR1 && state.listeCaracteres.get(8)==MainActivity.JOUEUR1 ||
+                state.listeCaracteres.get(3)==MainActivity.JOUEUR1 && state.listeCaracteres.get(4)==MainActivity.JOUEUR1 && state.listeCaracteres.get(5)==MainActivity.JOUEUR1 ||
+                state.listeCaracteres.get(6)==MainActivity.JOUEUR1 && state.listeCaracteres.get(7)==MainActivity.JOUEUR1 && state.listeCaracteres.get(8)==MainActivity.JOUEUR1 ||
+                state.listeCaracteres.get(0)==MainActivity.JOUEUR1 && state.listeCaracteres.get(4)==MainActivity.JOUEUR1 && state.listeCaracteres.get(8)==MainActivity.JOUEUR1 ||
+                state.listeCaracteres.get(2)==MainActivity.JOUEUR1 && state.listeCaracteres.get(4)==MainActivity.JOUEUR1 && state.listeCaracteres.get(6)==MainActivity.JOUEUR1){
             onVictory();
-        }else if (listeCaracteres.get(0)==MainActivity.JOUEUR2 && listeCaracteres.get(1)==MainActivity.JOUEUR2 && listeCaracteres.get(2)==MainActivity.JOUEUR2 ||
-                listeCaracteres.get(0)==MainActivity.JOUEUR2 && listeCaracteres.get(3)==MainActivity.JOUEUR2 && listeCaracteres.get(6)==MainActivity.JOUEUR2 ||
-                listeCaracteres.get(1)==MainActivity.JOUEUR2 && listeCaracteres.get(4)==MainActivity.JOUEUR2 && listeCaracteres.get(7)==MainActivity.JOUEUR2 ||
-                listeCaracteres.get(2)==MainActivity.JOUEUR2 && listeCaracteres.get(5)==MainActivity.JOUEUR2 && listeCaracteres.get(8)==MainActivity.JOUEUR2 ||
-                listeCaracteres.get(3)==MainActivity.JOUEUR2 && listeCaracteres.get(4)==MainActivity.JOUEUR2 && listeCaracteres.get(5)==MainActivity.JOUEUR2 ||
-                listeCaracteres.get(6)==MainActivity.JOUEUR2 && listeCaracteres.get(7)==MainActivity.JOUEUR2 && listeCaracteres.get(8)==MainActivity.JOUEUR2 ||
-                listeCaracteres.get(0)==MainActivity.JOUEUR2 && listeCaracteres.get(4)==MainActivity.JOUEUR2 && listeCaracteres.get(8)==MainActivity.JOUEUR2 ||
-                listeCaracteres.get(2)==MainActivity.JOUEUR2 && listeCaracteres.get(4)==MainActivity.JOUEUR2 && listeCaracteres.get(6)==MainActivity.JOUEUR2){
+        }else if (state.listeCaracteres.get(0)==MainActivity.JOUEUR2 && state.listeCaracteres.get(1)==MainActivity.JOUEUR2 && state.listeCaracteres.get(2)==MainActivity.JOUEUR2 ||
+                state.listeCaracteres.get(0)==MainActivity.JOUEUR2 && state.listeCaracteres.get(3)==MainActivity.JOUEUR2 && state.listeCaracteres.get(6)==MainActivity.JOUEUR2 ||
+                state.listeCaracteres.get(1)==MainActivity.JOUEUR2 && state.listeCaracteres.get(4)==MainActivity.JOUEUR2 && state.listeCaracteres.get(7)==MainActivity.JOUEUR2 ||
+                state.listeCaracteres.get(2)==MainActivity.JOUEUR2 && state.listeCaracteres.get(5)==MainActivity.JOUEUR2 && state.listeCaracteres.get(8)==MainActivity.JOUEUR2 ||
+                state.listeCaracteres.get(3)==MainActivity.JOUEUR2 && state.listeCaracteres.get(4)==MainActivity.JOUEUR2 && state.listeCaracteres.get(5)==MainActivity.JOUEUR2 ||
+                state.listeCaracteres.get(6)==MainActivity.JOUEUR2 && state.listeCaracteres.get(7)==MainActivity.JOUEUR2 && state.listeCaracteres.get(8)==MainActivity.JOUEUR2 ||
+                state.listeCaracteres.get(0)==MainActivity.JOUEUR2 && state.listeCaracteres.get(4)==MainActivity.JOUEUR2 && state.listeCaracteres.get(8)==MainActivity.JOUEUR2 ||
+                state.listeCaracteres.get(2)==MainActivity.JOUEUR2 && state.listeCaracteres.get(4)==MainActivity.JOUEUR2 && state.listeCaracteres.get(6)==MainActivity.JOUEUR2){
             onVictory();
         }
     }
 
     private void onVictory(){
         Toast.makeText(MainActivity.this, "Le joueur "+MainActivity.getCaractere()+" à gagné", Toast.LENGTH_LONG).show();
-        onRetry();
+        for (Button btn:listBtn){
+            btn.setEnabled(false);
+        }
     }
 
     private void onRetry(){
-        listeCaracteres = new ArrayList<>();
-        for (int a = 0; a<9; a++){
-            listeCaracteres.add(".");
-        }
+        state.onReset();
         for (Button btn:listBtn){
             btn.setText("");
+            btn.setEnabled(true);
         }
     }
 
+    @Override
+    protected void onPause() {
+        Serializer.serialize("save", state, MainActivity.this);
+        super.onPause();
+    }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+    }
+
+    private void getSerialize(Context contexte){
+        state = (GameState) Serializer.deserialize("save", contexte);
+    }
+
+    private void refresh(){
+        try{
+            getSerialize(this);
+            int compteur = 0;
+            for (Button btn:listBtn){
+                if (state.listeCaracteres.get(compteur).equals(".")) {
+                    listBtn.get(compteur).setText(state.listeCaracteres.get(compteur));
+                    if (MainActivity.getCaractere().equals("O")){
+                        listBtn.get(compteur).setTextColor(Color.BLUE);
+                    }else{
+                        listBtn.get(compteur).setTextColor(Color.RED);
+                    }
+                }
+            }
+        }catch (Exception e){};
+    }
 }
