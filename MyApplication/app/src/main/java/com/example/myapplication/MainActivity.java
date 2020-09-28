@@ -1,10 +1,13 @@
 package com.example.myapplication;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Parcelable;
+import android.os.PersistableBundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
@@ -17,10 +20,18 @@ public class MainActivity extends AppCompatActivity {
     public static final String JOUEUR1 = "X";
     public static final String JOUEUR2 = "O";
     private static GameState state;
+    private Bundle savedInstanceState;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        this.savedInstanceState=savedInstanceState;
         super.onCreate(savedInstanceState);
+        if (savedInstanceState!=null){
+            try{
+                state = (GameState) savedInstanceState.getSerializable("save");
+                refresh();
+            }catch(Exception e){}
+        }
         setContentView(R.layout.activity_main);
         init();
         initBtns();
@@ -133,23 +144,13 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onPause() {
-        Serializer.serialize("save", state, MainActivity.this);
-        super.onPause();
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-    }
-
-    private void getSerialize(Context contexte){
-        state = (GameState) Serializer.deserialize("save", contexte);
+    protected void onStop() {
+        //this.savedInstanceState.get putExtra("save", state);
+        super.onStop();
     }
 
     private void refresh(){
         try{
-            getSerialize(this);
             int compteur = 0;
             for (Button btn:listBtn){
                 if (state.listeCaracteres.get(compteur).equals(".")) {
